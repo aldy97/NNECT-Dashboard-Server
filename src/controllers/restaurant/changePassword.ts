@@ -19,7 +19,7 @@ export default async (req: Request, res: Response): Promise<void> => {
 
     let passwordCorrect: boolean;
     try {
-        passwordCorrect = await Restaurant.findOne({ _id, password: oldPassword });
+        passwordCorrect = await Restaurant.exists({ _id, password: oldPassword });
     } catch (err) {
         res.send({ message: MESSAGES.WRONG_CREDENTIALS });
     }
