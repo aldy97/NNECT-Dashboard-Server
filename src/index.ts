@@ -23,6 +23,6 @@ db.connect();
 
 app.use('/', router);
 
-app.listen(constants.DEFAULT_PORT, () => {
+app.listen(process.env.PORT || constants.DEFAULT_PORT, () => {
     console.log(`server is running on ${constants.DEFAULT_PORT}`);
 });
