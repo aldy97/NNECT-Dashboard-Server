@@ -18,7 +18,7 @@ export default async (req: Request, res: Response): Promise<void> => {
 
     let registerCodeMatches: boolean;
     try {
-        registerCodeMatches = await Register.findOne({ email, registerCode });
+        registerCodeMatches = await Register.exists({ email, registerCode });
     } catch (err) {
         res.send({ message: MESSAGES.WRONG_VERIFICATION_CODE });
     }

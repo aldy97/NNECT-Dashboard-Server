@@ -13,7 +13,7 @@ export default async (req: Request, res: Response): Promise<void> => {
 
     let restaurantExists: boolean;
     try {
-        restaurantExists = await Restaurant.findById(_id);
+        restaurantExists = await Restaurant.exists({ _id });
     } catch (error) {
         res.send({
             message: MESSAGES.USER_NOT_EXIST,

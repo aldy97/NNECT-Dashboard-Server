@@ -18,7 +18,7 @@ export default async (req: Request, res: Response): Promise<void> => {
 
     let offerExists: boolean;
     try {
-        offerExists = await Offer.findById(_id);
+        offerExists = await Offer.exists({ _id });
     } catch (err) {
         res.send({ message: MESSAGES.OFFER_NOT_FOUND });
     }
