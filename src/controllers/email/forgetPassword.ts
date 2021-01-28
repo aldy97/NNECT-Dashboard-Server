@@ -50,8 +50,8 @@ export default async (req: Request, res: Response): Promise<void> => {
         port: 465,
         secure: true,
         auth: {
-            user: 'support@nnect.ca',
-            pass: 'Nnect2021!',
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD,
         },
     });
 
