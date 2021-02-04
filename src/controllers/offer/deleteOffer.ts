@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { Offer } from '../../models/Offer';
+import { Offer, OfferDocument } from '../../models/Offer';
+import { Restaurant } from '../../models/Restaurant';
 import { MESSAGES } from '../../utils/constants';
 
 export default async (req: Request, res: Response): Promise<void> => {
@@ -20,6 +21,11 @@ export default async (req: Request, res: Response): Promise<void> => {
     if (!offerExists) {
         res.send({ meesage: MESSAGES.OFFER_NOT_FOUND });
     } else {
+        const offer: OfferDocument = await Offer.findOne({ _id });
+        await Restaurant.updateOne(
+            { _id: offer.restaurantID },
+            { $pull: { offers: _id as any } }
+        );
         await Offer.deleteOne({ _id });
         res.status(204).send({ message: MESSAGES.OFFER_DEL_SUCC });
     }
