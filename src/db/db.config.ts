@@ -2,15 +2,18 @@ import mongoose, { Mongoose } from 'mongoose';
 import * as CONFIG from '../utils/constants';
 require('dotenv').config();
 
+const DB_URL =
+    process.env.NODE_ENV === 'production' ? CONFIG.MONGODB : CONFIG.LOCAL_DB;
+
 /*
 remove deprecation warnings
 */
 mongoose.set('useFindAndModify', false);
 
 const connect = (): Mongoose => {
+    console.log(`DB_URL: ${DB_URL}`);
     // connect to db
-    console.error(`password is ${CONFIG.MONGODB}`);
-    mongoose.connect(CONFIG.MONGODB, {
+    mongoose.connect(DB_URL, {
         useCreateIndex: true,
         useNewUrlParser: true,
         promiseLibrary: global.Promise,

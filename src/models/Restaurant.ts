@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { ReservationDocument } from './Reservation';
 import { MenuItemDocument } from './MenuItem';
 import { OfferDocument } from './Offer';
 import db from '../db/db.config';
@@ -16,6 +17,7 @@ export interface IRestaurant {
     email: string;
     phoneNumber: string;
     password: string;
+    reservations?: Array<ReservationDocument['_id']> | ReservationDocument[];
     menu?: Array<MenuItemDocument['_id']> | MenuItemDocument[];
     offers?: Array<OfferDocument['_id']> | OfferDocument[];
     GST?: string;
@@ -59,6 +61,10 @@ const restaurantSchema = new instance.Schema({
     password: {
         type: String,
         required: [true, 'Password must be provided'],
+    },
+    reservations: {
+        type: instance.Schema.Types.ObjectId,
+        ref: 'Reservation',
     },
     menu: [
         {

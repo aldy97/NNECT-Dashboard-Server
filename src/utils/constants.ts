@@ -38,7 +38,18 @@ export const MESSAGES = {
     EMAIL_NOT_REGISTERED: 'This email is not registered with NNECT',
     EMPTY_VERIFICATION_CODE: 'Please enter the verification vcode',
     WRONG_VERIFICATION_CODE: 'Verification code is incorrect',
+    TIME_NOT_PROVIDED: 'The time of the event is not provided',
+    INVALID_TIME: 'The time is invalid',
+    TIME_IS_PAST: 'The event time is in the past',
+    NUMBER_OF_PEOPLE_UNDEFIND: 'Number of people coming to this event is undefined',
+    NUMBER_OF_PEOPLE_NOT_NUMBER: 'Number of people must be a number',
+    NUMBER_OF_PEOPLE_INVALID: 'Number of people must be greater than 0',
+    ORGANIZER_NAME_NOT_PROVIDED: 'Name of the organizer is not provided',
+    ORGANIZER_NUMBER_NOT_PROVIDED: 'Phone number of the organizer is not provided',
+    INVALID_OFFER:
+        'Either this offer does not exist, or this offer does not belong to the restaurant indicated',
 };
 
+export const LOCAL_DB = 'mongodb://localhost:27017/db';
 export const MONGODB = `mongodb+srv://fengxiong:${process.env.DB_PASSWORD}@cluster0.rudgy.mongodb.net/test?retryWrites=true&w=majority`;
 export const DEFAULT_PORT = 7001;

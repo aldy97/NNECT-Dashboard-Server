@@ -9,6 +9,8 @@ import db from './db/db.config';
 
 const app = express();
 
+const PORT = process.env.PORT || constants.DEFAULT_PORT;
+
 app.use(
     cors({
         credentials: true,
@@ -26,7 +28,6 @@ db.connect();
 
 app.use('/', router);
 
-app.listen(process.env.PORT || constants.DEFAULT_PORT, () => {
-    console.log(`process.env.PORT is ${process.env.PORT}`);
-    console.log(`actual port used is ${process.env.PORT || constants.DEFAULT_PORT}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port: ${PORT}`);
 });
