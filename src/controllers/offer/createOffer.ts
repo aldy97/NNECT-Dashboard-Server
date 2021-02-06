@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Restaurant } from '../../models/Restaurant';
 import { IOffer, Offer, OfferDocument } from '../../models/Offer';
 import { MESSAGES } from '../../utils/constants';
+import consola from 'consola';
 
 export default async (req: Request, res: Response): Promise<void> => {
     const {
@@ -19,6 +20,7 @@ export default async (req: Request, res: Response): Promise<void> => {
 
     if (!title) {
         res.send({ message: MESSAGES.EMPTY_OFFER_NAME });
+        return;
     }
 
     if (!restaurantID) {
@@ -26,10 +28,16 @@ export default async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
+    if (!maxPeople) {
+        res.send({ message: MESSAGES.MAX_PEOPLE_EMPTY });
+        return;
+    }
+
     let restaurantExists: boolean;
     try {
         restaurantExists = await Restaurant.exists({ _id: restaurantID });
     } catch (e) {
+        consola.error(e);
         res.send({ message: MESSAGES.USER_NOT_EXIST });
     }
     if (!restaurantExists) {
@@ -70,11 +78,15 @@ export default async (req: Request, res: Response): Promise<void> => {
         maxPeople,
     };
 
-    const newOffer: OfferDocument = await new Offer(offerInfo).save();
-    await Restaurant.updateOne(
-        { _id: restaurantID },
-        { $push: { offers: newOffer._id } }
-    );
-
-    res.status(201).send({ newOffer });
+    try {
+        const newOffer: OfferDocument = await new Offer(offerInfo).save();
+        await Restaurant.updateOne(
+            { _id: restaurantID },
+            { $push: { offers: newOffer._id } }
+        );
+        res.status(201).send({ newOffer });
+    } catch (e) {
+        consola.error(e);
+        res.status(500).send(MESSAGES.UNEXPECTED_ERROR);
+    }
 };

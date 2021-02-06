@@ -48,6 +48,8 @@ export const MESSAGES = {
     ORGANIZER_NUMBER_NOT_PROVIDED: 'Phone number of the organizer is not provided',
     INVALID_OFFER:
         'Either this offer does not exist, or this offer does not belong to the restaurant indicated',
+    MAX_PEOPLE_EMPTY: 'Maximum people for this offer is not indicated',
+    UNEXPECTED_ERROR: 'Unexpected error, please retry',
 };
 
 export const LOCAL_DB = 'mongodb://localhost:27017/db';

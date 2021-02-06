@@ -1,5 +1,6 @@
 import mongoose, { Mongoose } from 'mongoose';
 import * as CONFIG from '../utils/constants';
+import consola from 'consola';
 require('dotenv').config();
 
 const DB_URL =
@@ -11,7 +12,7 @@ remove deprecation warnings
 mongoose.set('useFindAndModify', false);
 
 const connect = (): Mongoose => {
-    console.log(`DB_URL: ${DB_URL}`);
+    consola.log(`DB_URL: ${DB_URL}`);
     // connect to db
     mongoose.connect(DB_URL, {
         useCreateIndex: true,
@@ -22,12 +23,12 @@ const connect = (): Mongoose => {
 
     // connection successful
     mongoose.connection.once('open', () => {
-        console.log('db connection successful!');
+        consola.log('db connection successful!');
     });
 
     // connection failed
     mongoose.connection.on('error', (err: any) => {
-        console.log('db connection failed: ', err);
+        consola.error('db connection failed: ', err);
     });
 
     // return mongoose instance

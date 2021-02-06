@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import router from './routers/index';
 import * as constants from './utils/constants';
 import cors from 'cors';
+import consola from 'consola';
 require('dotenv').config();
 
 import db from './db/db.config';
@@ -29,5 +30,5 @@ db.connect();
 app.use('/', router);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}`);
+    consola.log(`Server is running on port: ${PORT}`);
 });
