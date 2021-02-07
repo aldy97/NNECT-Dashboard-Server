@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { Restaurant, RestaurantDocument } from '../../models/Restaurant';
 import { MESSAGES } from '../../utils/constants';
-import nodemailer from 'nodemailer';
 import validator from 'validator';
+import sendMail from '../../utils/sendEmail';
 
 export default async (req: Request, res: Response): Promise<void> => {
     const email = req.params.email;
@@ -43,18 +43,6 @@ export default async (req: Request, res: Response): Promise<void> => {
         }
     );
 
-    // For gmail, go to https://myaccount.google.com/lesssecureapps, and allow less secure apps
-    const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-            user: process.env.EMAIL,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
-
     const mailOptions = {
         from: `NNECT ${process.env.EMAIL}`,
         to: email,
@@ -65,13 +53,10 @@ export default async (req: Request, res: Response): Promise<void> => {
                </div>`,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('error occurs: ', error);
-        } else {
-            console.log('Message sent: %s', info.messageId);
-        }
-    });
-
-    res.send({ status: 200, message: MESSAGES.FORGET_PASS_EMAIL_SENT_SUCC });
+    try {
+        sendMail(mailOptions);
+        res.send({ status: 200, message: MESSAGES.FORGET_PASS_EMAIL_SENT_SUCC });
+    } catch (e) {
+        res.send({ message: MESSAGES.UNEXPECTED_ERROR });
+    }
 };

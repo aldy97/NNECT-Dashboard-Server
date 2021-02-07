@@ -3,7 +3,7 @@ import { Restaurant } from '../../models/Restaurant';
 import { Register } from '../../models/Register';
 import { MESSAGES } from '../../utils/constants';
 import validator from 'validator';
-import nodemailer from 'nodemailer';
+import sendEmail from '../../utils/sendEmail';
 
 export default async (req: Request, res: Response): Promise<void> => {
     const { email, name, phoneNumber, password, confirmPassword } = req.body;
@@ -54,18 +54,6 @@ export default async (req: Request, res: Response): Promise<void> => {
     const registerCode = Math.floor(1000 + Math.random() * 9000);
     const register = await new Register({ email, registerCode }).save();
 
-    // For gmail, go to https://myaccount.google.com/lesssecureapps, and allow less secure apps
-    const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-            user: process.env.EMAIL,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
-
     const mailOptions = {
         from: `NNECT ${process.env.EMAIL}`,
         to: email,
@@ -76,13 +64,10 @@ export default async (req: Request, res: Response): Promise<void> => {
                    </div>`,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('error occurs: ', error);
-        } else {
-            console.log('Message sent: %s', info.messageId);
-        }
-    });
-
-    res.send({ status: 201, register });
+    try {
+        sendEmail(mailOptions);
+        res.send({ status: 201, register });
+    } catch (err) {
+        res.send({ message: MESSAGES.UNEXPECTED_ERROR });
+    }
 };
