@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Restaurant } from '../../models/Restaurant';
 import { MESSAGES } from '../../utils/constants';
+import md5 from '../../utils/md5';
 import moment from 'moment';
 
 export default async (req: Request, res: Response): Promise<void> => {
@@ -17,6 +18,7 @@ export default async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
+    // check whether the old password matches with the stored in db
     let passwordCorrect: boolean;
     try {
         passwordCorrect = await Restaurant.exists({ _id, password: oldPassword });
@@ -40,7 +42,7 @@ export default async (req: Request, res: Response): Promise<void> => {
 
     const newRestaurant = await Restaurant.findOneAndUpdate(
         { _id },
-        { password: newPassword, updatedOn: moment().format('LLL') },
+        { password: md5(newPassword), updatedOn: moment().format('LLL') },
         {
             new: true,
             runValidators: true,

@@ -6,6 +6,7 @@ import {
     IRestaurant,
 } from '../../models/Restaurant';
 import { MESSAGES } from '../../utils/constants';
+import md5 from '../../utils/md5';
 
 // all fields have been checked, except for registerCode
 export default async (req: Request, res: Response): Promise<void> => {
@@ -27,7 +28,12 @@ export default async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
-    const restaurantInfo: IRestaurant = { name, email, phoneNumber, password };
+    const restaurantInfo: IRestaurant = {
+        name,
+        email,
+        phoneNumber,
+        password: md5(password),
+    };
     const newRestaurant: RestaurantDocument = await new Restaurant(
         restaurantInfo
     ).save();

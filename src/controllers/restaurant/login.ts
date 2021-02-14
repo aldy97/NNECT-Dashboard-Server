@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Restaurant, RestaurantDocument } from '../../models/Restaurant';
 import validator from 'validator';
 import { MESSAGES } from '../../utils/constants';
+import md5 from '../../utils/md5';
 
 export default async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
@@ -24,7 +25,7 @@ export default async (req: Request, res: Response): Promise<void> => {
     let restaurant: RestaurantDocument | null;
 
     try {
-        restaurant = await Restaurant.findOne({ email, password });
+        restaurant = await Restaurant.findOne({ email, password: md5(password) });
     } catch (err) {
         res.send({ message: MESSAGES.WRONG_CREDENTIALS });
     }
